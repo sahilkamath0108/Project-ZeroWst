@@ -235,6 +235,51 @@ const updateUser = async (req, res) => {
     }
   };
 
+//buy food
+
+const buyFood = async (req,res) => {
+
+  try{
+    const foodId = req.params.id
+    const userId = req.user._id
+
+    const user = await UserSchema.findByIdAndUpdate({_id : userId}, {$push: {foodBought : foodId}} )
+
+    await FoodSchema.updateOne({_id : foodId}, {available : False})
+
+    res.json({
+      success: true,
+      message: "Food bought",
+      data: user
+    })
+  }catch(e){
+    res.json({
+      success: false,
+      message: e.message
+    })
+  }
+}
+
+//view history
+
+const history = async (req,res) => {
+  try{
+  const userId = req.user._id
+  const user = await UserSchema.findById({ _id : userId}).populate("foodBought")
+  
+  res.json({
+    success: true,
+    data: user.foodBought
+  })
+  }catch(e){
+    res.json({
+      success: false,
+      message: e.message
+    })
+  }
+  
+}
+
 
 
   module.exports = {
@@ -245,6 +290,8 @@ const updateUser = async (req, res) => {
     fileVerifyPfp,
     loginUser,
     deleteUser,
-    updateUser
+    updateUser,
+    buyFood,
+    history
   }
 

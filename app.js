@@ -15,8 +15,8 @@ app.use(express.json())
 // User 
 app.use('/user',userRoutes)
 
-// //provider
-// app.use('/provider',providerRoutes)
+//provider
+app.use('/provider',providerRoutes)
 
 // //admin
 // app.use('/admin',adminRoutes);

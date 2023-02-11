@@ -27,6 +27,14 @@ router.delete("/delete", auth.authToken ,userC.deleteUser)
 
 router.put("/update", auth.authToken ,userC.updateUser)
 
+//buy food
+
+router.post("/buy/:id", auth.authToken, userC.buyFood)
+
+//history
+
+router.get("/history", auth.authToken, userC.history)
+
 //forgot password
 
 // router.post("/forgotPassword", userC.forgotPswd)

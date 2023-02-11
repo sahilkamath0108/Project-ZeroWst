@@ -72,7 +72,7 @@ const providerSchema = new Schema({
     OTP: {
         type: Number,
     },
-    isVeriified:{
+    isVerified:{
         type: Boolean,
         default: False
     },
@@ -103,5 +103,5 @@ providerSchema.methods.genAuthToken = async function(){
     return accessToken
 }
 
-const ProviderSchema = mongoose.model("user", providerSchema);
+const ProviderSchema = mongoose.model("provider", providerSchema);
 module.exports = ProviderSchema;

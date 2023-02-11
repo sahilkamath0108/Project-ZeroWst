@@ -17,6 +17,10 @@ const foodSchema = new Schema({
     },
     image: {
         type: Buffer
+    },
+    available: {
+        type: Boolean,
+        default: True
     }
 }, {timestamps: true});
 

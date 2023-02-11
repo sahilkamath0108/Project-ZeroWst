@@ -57,7 +57,11 @@ const userSchema = new Schema({
     },
     OTP: {
         type: Number,
-    }
+    },
+    foodBought : [{
+        type : mongoose.Types.ObjectId,
+        ref: 'food'
+    }]
 
 }, {timestamps: true});
 
