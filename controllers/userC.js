@@ -2,6 +2,7 @@ require("dotenv").config()
 
 const UserSchema = require("../models/userSchema")
 const FoodSchema = require("../models/foodSchema")
+const ReviewSchema = require("../models/reviewSchema")
 
 const bcrypt = require("bcryptjs")
 const nodemailer = require("nodemailer")
@@ -289,6 +290,40 @@ const history = async (req,res) => {
   
 }
 
+//post review
+
+const review = async (req,res) => {
+  try{
+  const organization = req.body.organization
+  const reviewer = req.user
+  
+  const review = new ReviewSchema(req.body)
+  const savedReview = await review.save()
+  savedReview.reviewBy = reviewer.email
+
+  await UserSchema.findOneAndUpdate({email: reviewer._id}, {$push : { reviews : savedReview._id}})
+  await ProviderSchema.findOneAndUpdate({organization: organization}, {$push : { reviews : savedReview._id}})
+
+  mailTransporter.sendMail({
+    from: process.env.EMAIL,
+    to: organization.email,
+    subject:"A user has reviewed your Organization",
+    text: reviewer.fname + " has reviewed your place. They say " + review.review,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Review posted"
+  })
+}catch(e){
+  res.json({
+    success: false,
+    error: e.message
+  })
+}
+
+}
+
 
 
   module.exports = {
@@ -301,6 +336,7 @@ const history = async (req,res) => {
     deleteUser,
     updateUser,
     buyFood,
-    history
+    history,
+    review
   }
 

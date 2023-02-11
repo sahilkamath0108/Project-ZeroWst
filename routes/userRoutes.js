@@ -35,19 +35,11 @@ router.post("/buy/:id", auth.authToken, userC.buyFood)
 
 router.get("/history", auth.authToken, userC.history)
 
-//forgot password
+//put a review
 
-// router.post("/forgotPassword", userC.forgotPswd)
+router.post("/review", userC.review)
 
-//get otp
-
-// router.post("/getOTP", userC.loginOTP)
-
-//login via OTP
-
-// router.post("/loginOTP", auth.verifyOTP ,userC.verifyOTP)
-
-//view food
+//view Food
 
 router.get("/viewFood", auth.authToken, userC.viewFood)
 

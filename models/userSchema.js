@@ -62,8 +62,9 @@ const userSchema = new Schema({
         type : mongoose.Types.ObjectId,
         ref: 'food'
     }],
-    token: [{
-        type: Object
+    reviews : [{
+        type: mongoose.Types.ObjectId,
+        ref: 'review'
     }]
 
 }, {timestamps: true});

@@ -39,6 +39,10 @@ router.put("/update", auth.authToken ,providerC.updateProvider)
 
 router.get("/getFood", auth.authToken, providerC.viewFood)
 
+//provide response for review
+
+router.get("/response/:id", auth.authToken, providerC.response)
+
 //forgot password
 
 // router.post("/forgotPassword", providerC.forgotPswd)

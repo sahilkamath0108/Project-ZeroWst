@@ -82,6 +82,10 @@ const providerSchema = new Schema({
     food: [{
         type: mongoose.Types.ObjectId,
         ref: 'food'
+    }],
+    reviews : [{
+        type: mongoose.Types.ObjectId,
+        ref: 'review'
     }]
 
 }, {timestamps: true});

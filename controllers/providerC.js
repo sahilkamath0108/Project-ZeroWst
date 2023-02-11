@@ -7,6 +7,8 @@ const bcrypt = require("bcryptjs")
 const nodemailer = require("nodemailer")
 const otpGenerator = require("otp-generator")
 const multer = require("multer")
+const ReviewSchema = require("../models/reviewSchema")
+const UserSchema = require("../models/userSchema")
 
 let mailTransporter = nodemailer.createTransport({
     service: "gmail",
@@ -259,6 +261,35 @@ const viewFood = async (req,res) => {
   }
 }
 
+//provide response
+
+const response = async(req,res) => {
+  try{
+  const reviewId = req.params.id
+  const response = req.body.response
+
+  const review = await ReviewSchema.findByIdAndUpdate({_id: reviewId}, {review : response})
+
+  const user = await UserSchema.findById({_id: review.reviewBy})
+
+  mailTransporter.sendMail({
+    from: process.env.EMAIL,
+    to: user.email,
+    subject:"Response received on your review ",
+    text: review.reviewFor + " has responded to your review about their place. They say " + response,
+  });
+
+  res.json({
+    success: true,
+    message: "Response sent"
+  })}catch(e){
+    res.json({
+      success: false,
+      message: e.message
+    })
+  }
+}
+
 
 
 module.exports = {
@@ -270,5 +301,6 @@ module.exports = {
     deleteProvider,
     updateProvider,
     deleteFood,
-    viewFood
+    viewFood,
+    response
 }
