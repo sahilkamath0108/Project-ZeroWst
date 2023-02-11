@@ -7,7 +7,8 @@ const foodSchema = new Schema({
         required:true
     },
     expiryDate:{
-        type: Date,
+        type: String,
+        required: true
     },
     isVeg :{ 
         type: Boolean
