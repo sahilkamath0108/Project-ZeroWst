@@ -1,14 +1,14 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
-
-const userSchema = new Schema({
+const providerSchema = new Schema({
     role: {
         type: String,
         default: "provider"
-    },
-    username: {
-        type: String,
-        required: true,
-        unique: true
     },
     fname: {
         type: String,
@@ -28,16 +28,24 @@ const userSchema = new Schema({
             }
         }
     },
+    profilePic: {
+        type: Buffer
+    },
     restaurant:{
-        name : {
-            type: String
-        },
-        latitude: {
-            type: String
-        },
-        longitude: {
-            type: String
-        }
+        type: String,
+        required: true
+    },
+    GSTIN: {
+        type: Number,
+        required: true
+    },
+    latitude:{
+        type: Number,
+        required: true
+    },
+    longitude:{
+        type: Number,
+        required: true
     },
     profilePic: {
         type: Buffer
@@ -56,11 +64,6 @@ const userSchema = new Schema({
         type: Number,
         unique: true,
         required: true,
-        // validate(value){
-        //     if(!validator.isMobilePhone(value)){
-        //         throw new Error("Number is invalid!");
-        //     }
-        // }
     },
     password: {
         type: String,
@@ -68,6 +71,37 @@ const userSchema = new Schema({
     },
     OTP: {
         type: Number,
-    }
+    },
+    isVeriified:{
+        type: Boolean,
+        default: False
+    },
+    food: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'food'
+    }]
 
 }, {timestamps: true});
+
+//hash the password
+providerSchema.pre("save", async function(next){
+    try{
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(this.password, salt)
+        this.password = hashedPassword
+        next()
+    }catch(e){
+        console.log(e)
+    }
+})
+
+providerSchema.methods.genAuthToken = async function(){
+    const user = this
+
+    const accessToken = jwt.sign({ _id: user._id.toString() } , process.env.SECRET_KEY)
+
+    return accessToken
+}
+
+const ProviderSchema = mongoose.model("user", providerSchema);
+module.exports = ProviderSchema;

@@ -1,9 +1,14 @@
-
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 const userSchema = new Schema({
     role: {
         type: String,
-        default: "provider"
+        default: "user"
     },
     username: {
         type: String,
@@ -28,17 +33,6 @@ const userSchema = new Schema({
             }
         }
     },
-    restaurant:{
-        name : {
-            type: String
-        },
-        latitude: {
-            type: String
-        },
-        longitude: {
-            type: String
-        }
-    },
     profilePic: {
         type: Buffer
     },
@@ -55,12 +49,7 @@ const userSchema = new Schema({
     number: {
         type: Number,
         unique: true,
-        required: true,
-        // validate(value){
-        //     if(!validator.isMobilePhone(value)){
-        //         throw new Error("Number is invalid!");
-        //     }
-        // }
+        required: true
     },
     password: {
         type: String,
@@ -71,3 +60,26 @@ const userSchema = new Schema({
     }
 
 }, {timestamps: true});
+
+//hash the password
+userSchema.pre("save", async function(next){
+    try{
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(this.password, salt)
+        this.password = hashedPassword
+        next()
+    }catch(e){
+        console.log(e)
+    }
+})
+
+userSchema.methods.genAuthToken = async function(){
+    const user = this
+
+    const accessToken = jwt.sign({ _id: user._id.toString() } , process.env.SECRET_KEY)
+
+    return accessToken
+}
+
+const UserSchema = mongoose.model("user", userSchema);
+module.exports = UserSchema;
