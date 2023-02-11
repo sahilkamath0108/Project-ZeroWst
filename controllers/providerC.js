@@ -223,7 +223,7 @@ const updateProvider = async (req, res) => {
   
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        let newPswd = await UserSchema.findOneAndUpdate({ username: uname },{ password: hashedPassword })
+        let newPswd = await UserSchema.findOneAndUpdate({email: email },{ password: hashedPassword })
   
         
         res.status(201).json({

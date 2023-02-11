@@ -82,18 +82,18 @@ const uploadPfp = async (req, res) => {
   };
 
 
-//login user via username, password
+//login user via email, password
 
 const loginUser = async (req, res) => {
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
-    const user = await UserSchema.findOne({ username: username });
+    const user = await UserSchema.findOne({ email: email });
   
     if (!user) {
       return res.status(400).send({ error: "User does not exist..." });
     }
 
-    const withoutPswd = await UserSchema.findOne({ rollNo: rollNo }).select("-password -profilePic");
+    const withoutPswd = await UserSchema.findOne({ email: email }).select("-password -profilePic");
   
     try {
       if (await bcrypt.compare(password, user.password)) {
@@ -166,8 +166,6 @@ const deleteUser = async (req, res) => {
           message: "User not found",
         });
       } else {
-        await PostSchema.deleteMany({ username: user.username });
-        await PostSchema.updateMany({$pullAll: [{ "comment" : {"commentBy":user.username}}]})
   
         mailTransporter.sendMail({
           from: process.env.EMAIL,
@@ -194,10 +192,10 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
 
-    let uname = req.user.username;
+    let email = req.user.email;
   
     const updates = Object.keys(req.body);
-    const allowedUpdates = ["username", "fname", "lname", "number", "password"];
+    const allowedUpdates = ["fname", "lname", "number", "password"];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );
@@ -206,7 +204,7 @@ const updateUser = async (req, res) => {
       return res.status(400).send({ error: "Invalid Updates!" });
     }
   
-    let user = await UserSchema.findOne({ username: uname });
+    let user = await UserSchema.findOne({ email: email});
   
     if (!user) {
       res.status(404).json({
@@ -215,11 +213,11 @@ const updateUser = async (req, res) => {
       });
     } else {
       try {
-        await UserSchema.findOneAndUpdate({ username: uname },{ $set: req.body })
+        await UserSchema.findOneAndUpdate({ email: email },{ $set: req.body })
   
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        let newPswd = await UserSchema.findOneAndUpdate({ username: uname },{ password: hashedPassword })
+        let newPswd = await UserSchema.findOneAndUpdate({ email: email },{ password: hashedPassword })
   
         
         res.status(201).json({
@@ -252,7 +250,6 @@ const buyFood = async (req,res) => {
     }else if(food.stock == 1){
       await FoodSchema.updateOne({_id : foodId}, {$inc : {stock : -1}})
       await FoodSchema.updateOne({_id : foodId}, {available : false})
-      await FoodSchema.deleteOne({_id : foodId})
     }
 
     
