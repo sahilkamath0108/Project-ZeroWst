@@ -1,0 +1,7 @@
+flask
+pandas
+numpy
+gunicorn
+lightgbm
+nltk
+scikit-learn==1.1.1
