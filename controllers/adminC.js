@@ -158,7 +158,8 @@ const oneProvider = async (req,res) => {
 const verifyProvider = async (req,res) => {
     try{
         const providerId = req.params.id
-        const provider = await ProviderSchema.findByIdAndUpdate({ _id: providerId}, { isVerified: true})
+        const verificationId = req.body.verificationId
+        const provider = await ProviderSchema.findByIdAndUpdate({ _id: providerId}, { isVerified: true, verificationId: verificationId})
 
         res.status(200).json({
             success:true,
@@ -191,6 +192,24 @@ const getUsers = async (req,res) => {
     }
 }
 
+//view all food
+
+const viewFood = async (req,res) => {
+    try{
+        const data = await FoodSchema.find().sort({ createdAt: -1 })
+        
+        res.json({
+        success: true,
+        data: data
+    })
+    }catch(e){
+        res.json({
+            success: false,
+            error: e.message
+        })
+    }
+}
+
 
 module.exports = {
     createAdmin,
@@ -199,5 +218,6 @@ module.exports = {
     getProviders,
     getUsers,
     oneProvider,
-    verifyProvider
+    verifyProvider,
+    viewFood
 }

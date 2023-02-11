@@ -44,7 +44,7 @@ const adminSchema = new Schema({
     number: {
         type: Number,
         unique: true,
-        required: true,
+        // required: true,
     },
     password: {
         type: String,

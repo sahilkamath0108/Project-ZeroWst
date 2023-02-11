@@ -35,6 +35,10 @@ router.delete("/delete", auth.authToken ,providerC.deleteProvider)
 
 router.put("/update", auth.authToken ,providerC.updateProvider)
 
+//get all food
+
+router.get("/getFood", auth.authToken, providerC.viewFood)
+
 //forgot password
 
 // router.post("/forgotPassword", providerC.forgotPswd)

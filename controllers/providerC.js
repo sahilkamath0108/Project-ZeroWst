@@ -241,6 +241,24 @@ const updateProvider = async (req, res) => {
     }
   };
 
+//view food
+
+const viewFood = async (req,res) => {
+  try{
+      const data = await FoodSchema.find().sort({ createdAt: -1 })
+      
+      res.json({
+      success: true,
+      data: data
+  })
+  }catch(e){
+      res.json({
+          success: false,
+          error: e.message
+      })
+  }
+}
+
 
 
 module.exports = {
@@ -251,5 +269,6 @@ module.exports = {
     addFood,
     deleteProvider,
     updateProvider,
-    deleteFood
+    deleteFood,
+    viewFood
 }

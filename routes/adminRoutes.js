@@ -30,5 +30,9 @@ router.post("/verify/:id", adminC.verifyProvider)
 
 router.get("/allUsers", auth.authToken, auth.authRole("admin"), adminC.getUsers)
 
+//get all food
+
+router.get("/getFood", auth.authToken, adminC.viewFood)
+
 
 module.exports = router

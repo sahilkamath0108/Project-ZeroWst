@@ -76,6 +76,9 @@ const providerSchema = new Schema({
         type: Boolean,
         default: false
     },
+    verficationId:{
+        type: Number
+    },
     food: [{
         type: mongoose.Types.ObjectId,
         ref: 'food'
