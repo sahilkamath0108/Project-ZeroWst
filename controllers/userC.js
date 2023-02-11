@@ -257,7 +257,7 @@ const buyFood = async (req,res) => {
     res.json({
       success: true,
       message: "Food bought",
-      data: user
+      data: food
     })
   }catch(e){
     res.json({

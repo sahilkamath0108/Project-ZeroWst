@@ -5,15 +5,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
-const userSchema = new Schema({
+const adminSchema = new Schema({
     role: {
         type: String,
-        default: "user"
-    },
-    username: {
-        type: String,
-        required: true,
-        unique: true
+        default: "admin"
     },
     fname: {
         type: String,
@@ -29,7 +24,7 @@ const userSchema = new Schema({
         required: true,
         validate(value){
             if(!validator.isAlpha(value)){
-                throw new Error("First name is invalid!");
+                throw new Error("Last name is invalid!");
             }
         }
     },
@@ -50,11 +45,6 @@ const userSchema = new Schema({
         type: Number,
         unique: true,
         required: true,
-        // validate(value){
-        //     if(!validator.isMobilePhone(value)){
-        //         throw new Error("Number is invalid!");
-        //     }
-        // }
     },
     password: {
         type: String,
@@ -65,3 +55,25 @@ const userSchema = new Schema({
     }
 
 }, {timestamps: true});
+
+adminSchema.pre("save", async function(next){
+    try{
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(this.password, salt)
+        this.password = hashedPassword
+        next()
+    }catch(e){
+        console.log(e)
+    }
+})
+
+adminSchema.methods.genAuthToken = async function(){
+    const user = this
+
+    const accessToken = jwt.sign({ _id: user._id.toString() } , process.env.SECRET_KEY)
+
+    return accessToken
+}
+
+const AdminSchema = mongoose.model("admin", adminSchema);
+module.exports = AdminSchema;
