@@ -39,14 +39,6 @@ const providerSchema = new Schema({
         type: Number,
         required: true
     },
-    latitude:{
-        type: Number,
-        // required: true
-    },
-    longitude:{
-        type: Number,
-        // required: true
-    },
     profilePic: {
         type: Buffer
     },
@@ -86,7 +78,11 @@ const providerSchema = new Schema({
     reviews : [{
         type: mongoose.Types.ObjectId,
         ref: 'review'
-    }]
+    }],
+    location: {
+        type: [Number],  // [<longitude>, <latitude>]
+        index: '2d'      // create a 2d index on the location field
+    }
 
 }, {timestamps: true});
 
