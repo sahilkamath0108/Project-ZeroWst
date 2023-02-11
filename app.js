@@ -22,8 +22,8 @@ app.use('/user',userRoutes)
 //provider
 app.use('/provider',providerRoutes)
 
-// //admin
-// app.use('/admin',adminRoutes);
+//admin
+app.use('/admin',adminRoutes);
 
 // //food
 // app.use("/food",foodRoutes)

@@ -2,6 +2,7 @@ require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const UserSchema = require("../models/userSchema")
 const ProviderSchema = require("../models/providerSchema")
+const AdminSchema = require("../models/adminSchema")
 
 let auth = {
     authToken: async (req, res, next) => {
@@ -16,9 +17,14 @@ let auth = {
         if (!user) {
           const provider = await ProviderSchema.findById({ _id: decode._id });
           if (!provider) {
-            res.status(404).json({
-              error: "Wrong credentials",
-            });
+            const admin = await AdminSchema.findById({_id: decode._id})
+            if(!admin){
+              res.status(404).json({
+                error: "Wrong credentials",
+              });
+            }
+            req.user = admin
+            next()
           }
           req.user = provider;
           next();
@@ -33,6 +39,18 @@ let auth = {
         });
       }
     },
+
+    authRole: (role) => {
+      return (req, res, next) => {
+        if (req.user.role !== role) {
+          res.status(401).json({
+            message: "Not allowed",
+          });
+        }else{
+          next()
+        }
+      };
+    }
 }
 
 

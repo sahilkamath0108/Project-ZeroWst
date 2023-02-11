@@ -54,7 +54,7 @@ const createProvider = async (req, res) => {
     } catch (err) {
       res.status(400).json({
         success: false,
-        message: err.message,
+        error: err.message,
       });
     }
   };
@@ -72,7 +72,7 @@ const uploadPfp = async (req, res) => {
     } catch (err) {
       res.status(500).json({
         success: false,
-        message: err.message,
+        error: err.message,
       });
     }
   };
@@ -102,19 +102,21 @@ const loginProvider = async (req, res) => {
           token: token,
         });
       } else {
-        res.send("Wrong password");
+        res.status(400).json({
+          error : "Wrong password"
+        });
       }
     } catch (e) {
       res.status(500).json({
         success: false,
-        message: e.message,
+        error: e.message,
       });
     }
 }
 }catch(e){
     res.json({
         success: false,
-        message: e.message
+        error: e.message
     })
 }
   };
@@ -144,7 +146,7 @@ const addFood = async (req,res) => {
     }catch(e){
         res.json({
             success: false,
-            message: e.message
+            error: e.message
         })
     }
     }
@@ -163,7 +165,7 @@ const deleteFood = async(req,res) => {
     }catch(e){
         res.json({
             success: false,
-            message: e.message
+            error: e.message
         })
     }
 }
@@ -186,7 +188,7 @@ const deleteProvider = async (req,res) => {
     }catch(e){
         res.json({
             success : false,
-            message: e.message
+            error: e.message
         })
     }
     
@@ -215,7 +217,7 @@ const updateProvider = async (req, res) => {
     if (!provider) {
       res.status(404).json({
         success: false,
-        message: "Provider not found",
+        error: "Provider not found",
       })
     } else {
       try {
@@ -233,7 +235,7 @@ const updateProvider = async (req, res) => {
       } catch (err) {
         res.status(500).json({
           success: false,
-          message: err.message,
+          error: err.message,
         });
       }
     }

@@ -58,7 +58,7 @@ const createUser = async (req, res) => {
     } catch (err) {
       res.status(400).json({
         success: false,
-        message: err.message,
+        error: err.message,
       });
     }
   };
@@ -76,7 +76,7 @@ const uploadPfp = async (req, res) => {
     } catch (err) {
       res.status(500).json({
         success: false,
-        message: err.message,
+        error: err.message,
       });
     }
   };
@@ -103,12 +103,14 @@ const loginUser = async (req, res) => {
           token: token,
         });
       } else {
-        res.send("Wrong password");
+        res.status(400).json({
+          error : "Wrong password"
+        });
       }
     } catch (e) {
       res.status(500).json({
         success: false,
-        message: e.message,
+        error: e.message,
       });
     }
   };
@@ -127,7 +129,7 @@ const viewFood = async (req,res) => {
     }catch(e){
         res.json({
             success: false,
-            message: e.message
+            error: e.message
         })
     }
 }
@@ -145,7 +147,7 @@ const viewProvider = async (req,res) => {
     }catch(e){
         res.json({
             success: false,
-            message: e.message
+            error: e.message
         })
     } 
 }
@@ -163,7 +165,7 @@ const deleteUser = async (req, res) => {
       if (!user) {
         res.status(404).json({
           success: false,
-          message: "User not found",
+          error: "User not found",
         });
       } else {
   
@@ -176,14 +178,14 @@ const deleteUser = async (req, res) => {
   
         res.status(200).json({
           success: true,
-          message: "User was deleted",
+          error: "User was deleted",
           data: user,
         });
       }
     } catch (e) {
       res.status(400).json({
         success: false,
-        message: e.message,
+        error: e.message,
       });
     }
   };
@@ -209,7 +211,7 @@ const updateUser = async (req, res) => {
     if (!user) {
       res.status(404).json({
         success: false,
-        message: "User not found",
+        error: "User not found",
       });
     } else {
       try {
@@ -227,7 +229,7 @@ const updateUser = async (req, res) => {
       } catch (err) {
         res.status(500).json({
           success: false,
-          message: err.message,
+          error: err.message,
         });
       }
     }
@@ -262,7 +264,7 @@ const buyFood = async (req,res) => {
   }catch(e){
     res.json({
       success: false,
-      message: e.message
+      error: e.message
     })
   }
 }
@@ -281,7 +283,7 @@ const history = async (req,res) => {
   }catch(e){
     res.json({
       success: false,
-      message: e.message
+      error: e.message
     })
   }
   
