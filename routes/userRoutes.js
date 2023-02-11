@@ -2,6 +2,7 @@ const express = require("express")
 
 const userC = require("../controllers/userC")
 const auth = require("../middleware/auth")
+const pay = require("../payment/payment")
 
 const router = express.Router()
 
@@ -48,6 +49,8 @@ router.get("/viewFood", auth.authToken, userC.viewFood)
 router.get("/viewProvider", auth.authToken, userC.viewProvider)
 
 //payment
+
+router.post("/pay",  pay.makePayment )
 
 // router.post("/pay", auth.authToken, )
 

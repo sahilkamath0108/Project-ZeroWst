@@ -10,7 +10,8 @@ const reviewSchema = new Schema({
         required: true
     },
     review:{
-        type: String
+        type: String,
+        requires : true
     },
     response:{
         type: String

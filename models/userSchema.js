@@ -65,7 +65,7 @@ const userSchema = new Schema({
     reviews : [{
         type: mongoose.Types.ObjectId,
         ref: 'review'
-    }]
+    }],
 
 }, {timestamps: true});
 
