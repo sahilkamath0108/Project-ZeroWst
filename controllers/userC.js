@@ -136,7 +136,7 @@ const viewFood = async (req,res) => {
 
 const viewProvider = async (req,res) => {
     try{
-        const data = await ProviderSchema.find()
+        const data = await ProviderSchema.find().populate('food')
 
         res.status(200).json({
             success : true,
@@ -176,7 +176,7 @@ const deleteUser = async (req, res) => {
           text: "We do hope you come back, we will be waiting for you! Thank you",
         });
   
-        res.status(201).json({
+        res.status(200).json({
           success: true,
           message: "User was deleted",
           data: user,
@@ -245,7 +245,17 @@ const buyFood = async (req,res) => {
 
     const user = await UserSchema.findByIdAndUpdate({_id : userId}, {$push: {foodBought : foodId}} )
 
-    await FoodSchema.updateOne({_id : foodId}, {available : False})
+    const food = await FoodSchema.findOne({_id : foodId})
+
+    if(food.stock>1){
+      await FoodSchema.updateOne({_id : foodId}, {$inc : {stock : -1}})
+    }else if(food.stock == 1){
+      await FoodSchema.updateOne({_id : foodId}, {$inc : {stock : -1}})
+      await FoodSchema.updateOne({_id : foodId}, {available : false})
+      await FoodSchema.deleteOne({_id : foodId})
+    }
+
+    
 
     res.json({
       success: true,

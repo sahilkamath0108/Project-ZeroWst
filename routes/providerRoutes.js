@@ -17,19 +17,23 @@ router.post("/uploadPfp", auth.authToken , providerC.fileVerifyPfp.single('pfp')
 
 //login provider
 
-router.post("/login", providerC.loginprovider)
+router.post("/login", providerC.loginProvider)
 
-//add food
+// add food
 
 router.post("/addFood", auth.authToken, providerC.addFood)
 
+//delete food
+
+router.post("/deleteFood/:id", auth.authToken, providerC.deleteFood)
+
 // delete provider
 
-router.delete("/delete", auth.authToken ,providerC.deleteprovider)
+router.delete("/delete", auth.authToken ,providerC.deleteProvider)
 
 //updating provider info
 
-router.put("/update", auth.authToken ,providerC.updateprovider)
+router.put("/update", auth.authToken ,providerC.updateProvider)
 
 //forgot password
 
@@ -45,15 +49,12 @@ router.put("/update", auth.authToken ,providerC.updateprovider)
 
 //view food
 
-router.get("/viewFood", auth.authToken, providerC.viewFood)
+// router.get("/viewFood", auth.authToken, providerC.viewFood)
 
-//view providers
+// //view providers
 
-router.get("/viewProvider", auth.authToken, providerC.viewProvider)
+// router.get("/viewProvider", auth.authToken, providerC.viewProvider)
 
-//payment
-
-// router.post("/pay", auth.authToken, )
 
 module.exports = router
 

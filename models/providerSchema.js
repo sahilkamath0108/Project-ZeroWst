@@ -31,11 +31,11 @@ const providerSchema = new Schema({
     profilePic: {
         type: Buffer
     },
-    restaurant:{
+    organization:{
         type: String,
         required: true
     },
-    GSTIN: {
+    aadharCardNo: {
         type: Number,
         required: true
     },
@@ -74,7 +74,7 @@ const providerSchema = new Schema({
     },
     isVerified:{
         type: Boolean,
-        default: False
+        default: false
     },
     food: [{
         type: mongoose.Types.ObjectId,

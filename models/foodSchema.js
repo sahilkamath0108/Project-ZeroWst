@@ -20,7 +20,11 @@ const foodSchema = new Schema({
     },
     available: {
         type: Boolean,
-        default: True
+        default: true
+    },
+    stock: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true});
 

@@ -7,7 +7,6 @@ const bcrypt = require("bcryptjs")
 const nodemailer = require("nodemailer")
 const otpGenerator = require("otp-generator")
 const multer = require("multer")
-const ProviderSchema = require("../models/providerSchema")
 
 let mailTransporter = nodemailer.createTransport({
     service: "gmail",
@@ -60,6 +59,24 @@ const createProvider = async (req, res) => {
     }
   };
 
+  //upload profile picture
+
+const uploadPfp = async (req, res) => {
+    try {
+      const buffer = req.file.buffer;
+      req.user.profilePic = buffer;
+      await req.user.save();
+      res.json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
+  };
+
 
 //login provider
 
@@ -103,7 +120,134 @@ const loginProvider = async (req, res) => {
   };
 
 
+//add food
+
+const addFood = async (req,res) => {
+
+    try{
+    let foodData = new FoodSchema(req.body)
+    let savedFoodData = await foodData.save()
+    let foodId = savedFoodData._id
+    let providerId = req.user._id
+
+    const provider = ProviderSchema.findById({_id : providerId})
+
+    savedFoodData.provider = provider.organization
+
+    await ProviderSchema.findByIdAndUpdate({ _id : providerId}, {$push: {food : foodId}})
+
+    res.status(201).json({
+        success: true,
+        message: "Food item added",
+        data: savedFoodData,
+      })
+    }catch(e){
+        res.json({
+            success: false,
+            message: e.message
+        })
+    }
+    }
+//delete food
+
+const deleteFood = async(req,res) => {
+    try{
+        const foodId = req.params.id
+        const food = await FoodSchema.deleteOne({_id : foodId})
+
+        res.status(200).json({
+            success: true,
+            message: "Food item deleted",
+            data: food
+        })
+    }catch(e){
+        res.json({
+            success: false,
+            message: e.message
+        })
+    }
+}
+
+
+//delete provider
+
+const deleteProvider = async (req,res) => {
+    try{
+        const id = req.user._id
+        const provider =  await ProviderSchema.findByIdAndDelete({ _id : id})
+
+        await FoodSchema.deleteMany({ provider : provider.organization})
+
+        res.status(200).json({
+            success: true,
+            message: "Provider and their food items deleted",
+            data: provider
+        })
+    }catch(e){
+        res.json({
+            success : false,
+            message: e.message
+        })
+    }
+    
+
+    
+}
+
+//update provider
+
+const updateProvider = async (req, res) => {
+
+    let email = req.user.email
+  
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ["fname", "lname", "number", "password","latitude","longitude"];
+    const isValidOperation = updates.every((update) =>
+      allowedUpdates.includes(update)
+    );
+  
+    if (!isValidOperation) {
+      return res.status(400).send({ error: "Invalid Updates!" });
+    }
+  
+    let provider = await ProviderSchema.findOne({ email : email });
+  
+    if (!provider) {
+      res.status(404).json({
+        success: false,
+        message: "Provider not found",
+      })
+    } else {
+      try {
+        await ProviderSchema.findOneAndUpdate({ email: email },{ $set: req.body })
+  
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        let newPswd = await UserSchema.findOneAndUpdate({ username: uname },{ password: hashedPassword })
+  
+        
+        res.status(201).json({
+          success: true,
+          data: req.body,
+        });
+      } catch (err) {
+        res.status(500).json({
+          success: false,
+          message: err.message,
+        });
+      }
+    }
+  };
+
+
 
 module.exports = {
-    createProvider
+    createProvider,
+    loginProvider,
+    uploadPfp,
+    fileVerifyPfp,
+    addFood,
+    deleteProvider,
+    updateProvider,
+    deleteFood
 }
