@@ -94,7 +94,7 @@ const loginProvider = async (req, res) => {
         return res.send({ error : "Admin has not yet verified, please wait for some time"})
     }else{
 
-    const withoutPswd = await ProviderSchema.findOne({ rollNo: rollNo }).select("-password -profilePic");
+    const withoutPswd = await ProviderSchema.findOne({ email: email }).select("-password -profilePic");
   
     try {
       if (await bcrypt.compare(password, provider.password)) {
