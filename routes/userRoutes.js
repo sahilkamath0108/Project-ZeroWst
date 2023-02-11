@@ -13,43 +13,43 @@ router.post("/new", userC.createUser)
 
 //upload profile picture
 
-router.post("/uploadPfp", auth.authToken , auth.fileVerifyPfp.single('pfp'), userC.uploadPfp )
+router.post("/uploadPfp", auth.authToken , userC.fileVerifyPfp.single('pfp'), userC.uploadPfp )
 
 //login user
 
 router.post("/login", userC.loginUser)
 
-//delete user
+// delete user
 
-// router.delete("/delete", auth.authToken ,userC.deleteUser)
+router.delete("/delete", auth.authToken ,userC.deleteUser)
 
 //updating user info
 
-// router.put("/update", auth.authToken ,userC.updateUser)
+router.put("/update", auth.authToken ,userC.updateUser)
 
 //forgot password
 
-router.post("/forgotPassword", userC.forgotPswd)
+// router.post("/forgotPassword", userC.forgotPswd)
 
 //get otp
 
-router.post("/getOTP", userC.loginOTP)
+// router.post("/getOTP", userC.loginOTP)
 
 //login via OTP
 
-router.post("/loginOTP", auth.verifyOTP ,userC.verifyOTP)
+// router.post("/loginOTP", auth.verifyOTP ,userC.verifyOTP)
 
 //view food
 
-router.get("/viewFood", auth.authToken, userC.)
+router.get("/viewFood", auth.authToken, userC.viewFood)
 
 //view providers
 
-router.get("/viewProvider", auth.authToken, userC.)
+router.get("/viewProvider", auth.authToken, userC.viewProvider)
 
 //payment
 
-router.post("/pay", auth.authToken, )
+// router.post("/pay", auth.authToken, )
 
 module.exports = router
 

@@ -4,7 +4,7 @@ const UserSchema = require("../models/userSchema")
 const ProviderSchema = require("../models/providerSchema")
 
 let auth = {
-    authTokenUser: async (req, res, next) => {
+    authToken: async (req, res, next) => {
       try {
         const authHeader = req.header("Authorization");
         const token = authHeader && authHeader.split(" ")[1];
