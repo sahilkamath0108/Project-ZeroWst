@@ -1,7 +1,10 @@
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:zerowst_sendnodes/Modules/Auth/auth_controller.dart';
 import 'package:zerowst_sendnodes/Modules/Auth/login_page.dart';
 import 'package:zerowst_sendnodes/Modules/Food%20List/food_list_page.dart';
+import 'package:zerowst_sendnodes/Modules/Home/drawer.dart';
 import 'package:zerowst_sendnodes/Modules/Map/map_page.dart';
 import 'package:zerowst_sendnodes/Modules/Notices/notices_page.dart';
 import 'package:zerowst_sendnodes/Modules/Transactions/previous_transactions_page.dart';
@@ -16,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthController authController = Get.put(AuthController());
   Widget? _child;
 
   @override
@@ -55,8 +59,15 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
+          drawer: DrawerPage(user: authController.user!,),
           appBar: AppBar(
-            leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+            leading: Builder(
+              builder: (context) => IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Icon(Icons.menu)),
+            ),
             elevation: 0,
             backgroundColor: DARK_GREEN,
             title: Text("ZeroWst"),

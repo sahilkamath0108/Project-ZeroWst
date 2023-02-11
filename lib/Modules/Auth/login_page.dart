@@ -1,7 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:zerowst_sendnodes/Modules/Auth/auth_controller.dart';
 import 'package:zerowst_sendnodes/Modules/Auth/signup_page.dart';
+import 'package:zerowst_sendnodes/Modules/Home/home_page.dart';
+import 'package:zerowst_sendnodes/constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passController = TextEditingController();
   final _formKeyLogin = GlobalKey<FormState>();
+
+  AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Form(
                   key: _formKeyLogin,
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    color: Colors.grey[200],
                     margin: EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -59,51 +68,59 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Hello,",
                             style: TextStyle(
-                                fontSize: 80,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
+                              fontSize: 80,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15),
                           child: Text(
                             "Login Now!",
-                            style: TextStyle(fontSize: 30, color: Colors.white),
+                            style: TextStyle(fontSize: 30),
                           ),
                         ),
                         SizedBox(
                           height: 60,
                         ),
                         Card(
-                          child: TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(color: Colors.black),
-                            validator: (text) => isValidEmail(text!)
-                                ? null
-                                : "Enter valid email",
-                            decoration: InputDecoration(
-                                hintText: "Email",
-                                hintStyle: TextStyle(color: Colors.black),
-                                border: InputBorder.none),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            child: TextFormField(
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              style: TextStyle(color: Colors.black),
+                              validator: (text) => isValidEmail(text!)
+                                  ? null
+                                  : "Enter valid email",
+                              decoration: InputDecoration(
+                                  hintText: "Email",
+                                  hintStyle: TextStyle(color: Colors.black),
+                                  border: InputBorder.none),
+                            ),
                           ),
                           margin: EdgeInsets.all(20),
                         ),
                         Card(
-                          child: TextFormField(
-                            controller: _passController,
-                            obscureText: true,
-                            style: TextStyle(color: Colors.black),
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Password cannot be empty';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                hintText: "Password",
-                                hintStyle: TextStyle(color: Colors.black),
-                                border: InputBorder.none),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            child: TextFormField(
+                              controller: _passController,
+                              obscureText: true,
+                              style: TextStyle(color: Colors.black),
+                              validator: (text) {
+                                if (text == null || text.isEmpty) {
+                                  return 'Password cannot be empty';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(color: Colors.black),
+                                  border: InputBorder.none),
+                            ),
                           ),
                           margin:
                               EdgeInsets.only(bottom: 20, left: 20, right: 20),
@@ -112,19 +129,41 @@ class _LoginPageState extends State<LoginPage> {
                             padding: const EdgeInsets.only(
                                 left: 20, bottom: 20, right: 20),
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 if (_formKeyLogin.currentState!.validate()) {
-                                  // signIn();
+                                  var response = await authController.login(
+                                      _emailController.text.trim(),
+                                      _passController.text.trim(),
+                                      "User");
+                                  if (response == "200") {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                          child: Container(
+                                            color: Colors.white,
+                                            padding: EdgeInsets.all(20),
+                                            child: Text("An error ocurred"),
+                                          ),
+                                        ));
+                                  }
                                 }
                               },
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Card(
-                                  child: Center(
-                                      child: Text(
-                                    "Sign In",
-                                    style: TextStyle(color: Colors.white),
-                                  )),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                        child: Text(
+                                      "Sign In",
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                                  ),
                                   color: Colors.grey[700],
                                 ),
                               ),
@@ -136,7 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 "Don't have an account?  ",
                                 style: TextStyle(
-                                    fontSize: 15, color: Colors.white),
+                                  fontSize: 15,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -148,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   "Register Now",
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.black),
+                                      fontSize: 15, color: Colors.blue),
                                 ),
                               ),
                             ],
