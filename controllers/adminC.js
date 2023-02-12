@@ -93,7 +93,7 @@ const loginAdmin = async (req, res) => {
       return res.status(400).send({ error: "Admin does not exist..." });
     }
 
-    const withoutPswd = await AdminSchema.findOne({ rollNo: rollNo }).select("-password -profilePic");
+    const withoutPswd = await AdminSchema.findOne({ email: email }).select("-password -profilePic");
   
       if (await bcrypt.compare(password, admin.password)) {
         const token = await admin.genAuthToken();
