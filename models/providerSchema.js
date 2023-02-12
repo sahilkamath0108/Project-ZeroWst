@@ -4,6 +4,19 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
+const geoJson = require('mongoose-geojson-schema')
+
+const pointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});
 
 const providerSchema = new Schema({
     role: {
@@ -80,11 +93,20 @@ const providerSchema = new Schema({
         ref: 'review'
     }],
     location: {
-        type: [Number],  // [<longitude>, <latitude>]
-        index: '2d'      // create a 2d index on the location field
-    }
+        type: {
+          type: String,
+        //   enum: ['Point'],
+          default: 'Point',
+        },
+        coordinates: {
+          type: [Number],
+          default: [0, 0],
+        }
+      } 
 
 }, {timestamps: true});
+
+providerSchema.index({ 'location': '2dsphere' });
 
 //hash the password
 providerSchema.pre("save", async function(next){

@@ -60,6 +60,7 @@ const createProvider = async (req, res) => {
       });
     }
   };
+  
 
   //upload profile picture
 

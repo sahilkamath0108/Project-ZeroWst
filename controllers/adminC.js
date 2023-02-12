@@ -219,5 +219,6 @@ module.exports = {
     getUsers,
     oneProvider,
     verifyProvider,
-    viewFood
+    viewFood,
+    loginAdmin
 }

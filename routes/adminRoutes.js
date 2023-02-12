@@ -34,5 +34,9 @@ router.get("/allUsers", auth.authToken, auth.authRole("admin"), adminC.getUsers)
 
 router.get("/getFood", auth.authToken, adminC.viewFood)
 
+//login admin
+
+router.post("/login", adminC.loginAdmin)
+
 
 module.exports = router
