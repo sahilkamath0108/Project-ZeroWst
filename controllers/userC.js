@@ -141,9 +141,30 @@ const viewProvider = async (req,res) => {
     try{
         const data = await ProviderSchema.find().populate('food')
 
+        data.forEach(obj => {
+          let lat1 = obj.latitude * Math.PI / 180
+          let lon1 = obj.longitude * Math.PI / 180
+
+          let lat2 = 19.218 * Math.PI / 180
+          let lon2 = 72.847 * Math.PI / 180
+
+          let dlon = lon2 - lon1;
+        let dlat = lat2 - lat1;
+        let a = Math.pow(Math.sin(dlat / 2), 2)
+                 + Math.cos(lat1) * Math.cos(lat2)
+                 * Math.pow(Math.sin(dlon / 2),2);
+               
+        let c = 2 * Math.asin(Math.sqrt(a));
+
+        let r = 6371;
+
+         obj.distance = (c*r)
+
+})
+
         res.status(200).json({
             success : true,
-            data : data
+            data : data,
         })
     }catch(e){
         res.json({

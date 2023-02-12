@@ -46,6 +46,14 @@ const userSchema = new Schema({
             }
         }
     },
+    longitude:{
+        type: Number,
+        // required: true
+    },
+    latitude:{
+        type: Number,
+        // required: true
+    },
     number: {
         type: Number,
         unique: true,

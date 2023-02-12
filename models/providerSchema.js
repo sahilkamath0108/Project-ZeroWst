@@ -89,7 +89,10 @@ const providerSchema = new Schema({
     }],
     location : [{
         type: Number
-    }]
+    }],
+    distance: {
+        type: Number
+    }
 
 }, {timestamps: true});
 

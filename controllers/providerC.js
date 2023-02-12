@@ -38,10 +38,6 @@ const createProvider = async (req, res) => {
       let id = savedProviderData._id;
       providerMail = savedProviderData.email;
 
-      const lo = savedProviderData.longitude
-      const la = savedProviderData.latitude
-
-      savedProviderData.location= [lo, la]
   
       mailTransporter.sendMail({
         from: process.env.EMAIL,
