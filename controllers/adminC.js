@@ -98,6 +98,7 @@ const loginAdmin = async (req, res) => {
       if (await bcrypt.compare(password, admin.password)) {
         const token = await admin.genAuthToken();
         res.json({
+          success:true,
           admin: withoutPswd,
           token: token,
         });

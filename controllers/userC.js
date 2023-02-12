@@ -100,6 +100,7 @@ const loginUser = async (req, res) => {
       if (await bcrypt.compare(password, user.password)) {
         const token = await user.genAuthToken();
         res.json({
+          success:true,
           user: withoutPswd,
           token: token,
         });

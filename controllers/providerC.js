@@ -102,6 +102,7 @@ const loginProvider = async (req, res) => {
       if (await bcrypt.compare(password, provider.password)) {
         const token = await provider.genAuthToken();
         res.json({
+          success:true,
           provider: withoutPswd,
           token: token,
         });
