@@ -1,16 +1,11 @@
 import React from 'react'
 import { Grid, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-//import img1 from './Image/Nowst.jpg'
+import logo from '../images/logo.jpeg'
+import zIndex from '@mui/material/styles/zIndex';
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   return (
@@ -19,9 +14,18 @@ export default function Navbar() {
         <Container maxWidth="xxl">
           <Toolbar disableGutters>
             <Grid container>
+              
+              <motion.img
+              initial={{width:'100%',rotate:0}}
+              animate={{width:'9%',rotate:360}}
+              transition={{delay:1,duration:1}}
+              src={logo} style={{width:'9%',display:'inline-block',position:'absolute',top:-13,zIndex:'1'}}></motion.img>
+              
+              <Grid item md={1.3}></Grid>
               <Grid item md={6}>
+                
                 <Typography
-                  variant="h6"
+                  variant="h4"
                   noWrap
                   component="a"
                   href="/"
@@ -29,7 +33,7 @@ export default function Navbar() {
                     mr: 2,my:2,
                     display: { xs: 'flex', md: 'flex' },
                     fontFamily: 'monospace',
-                    fontWeight: 700,
+                    fontWeight: 900,
                     letterSpacing: '.3rem',
                     color: 'Black',
                     textDecoration: 'none',
@@ -38,7 +42,7 @@ export default function Navbar() {
                   ZeroWst
                 </Typography>
               </Grid>
-              <Grid item md={6}>
+              {/* <Grid item md={6}>
                 <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, width: '100%' }}>
 
                   <Button sx={{ my: 2, color: 'Black', display: 'block' }}>
@@ -62,7 +66,7 @@ export default function Navbar() {
                   </Button>
 
                 </Box>
-              </Grid>
+              </Grid> */}
             </Grid>
 
 

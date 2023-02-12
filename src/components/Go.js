@@ -58,18 +58,18 @@ export default function Go() {
                 <Grid item md={4}>
                     
                     <motion.div 
-                    initial={{x:'1100px'}}
+                    initial={{x:'1200px'}}
                     animate={{
                                 x:'100px'
                     }}
                     transition={{
-                        delay:1,type:'spring'
+                        delay:2,type:'spring',duration:1,stiffness:100
                     }}
             
                     
                     >
                         <Button variant='contained' sx={{ borderRadius: 10, backgroundColor: '#03AC13', alignContent: 'center', padding: 2, width: 200 }}>
-                            <Typography variant='h3' sx={{ color: 'black' }}>ZW</Typography>
+                            <Typography variant='h3' sx={{ color: 'black' }}>ZW </Typography>
                             {/* <GetAppSharpIcon fontSize='large' sx={{color:'black'}}/> */}
                             <img src={play} style={{width:'20%'}} alt='heloo'></img>
                         </Button>
