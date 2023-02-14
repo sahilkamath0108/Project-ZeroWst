@@ -140,7 +140,7 @@ const viewFood = async (req,res) => {
 
 const viewProvider = async (req,res) => {
     try{
-        const data = await ProviderSchema.find().populate('food')
+        const data = await ProviderSchema.find().populate('food').select("-password")
 
         data.forEach(obj => {
           let lat1 = obj.latitude * Math.PI / 180
