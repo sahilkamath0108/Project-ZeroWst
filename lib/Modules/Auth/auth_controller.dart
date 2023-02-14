@@ -2,12 +2,19 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:zerowst_sendnodes/Modules/Admin%20Home/admin_model.dart';
 import 'package:zerowst_sendnodes/Modules/Home/user_model.dart';
+import 'package:zerowst_sendnodes/Modules/Providers%20Home%20Page/provider_model.dart';
+
+import '../Admin Home/admin_model.dart';
 
 class AuthController extends GetxController {
   String baseUrl = "http://localhost:3000";
   String? userToken;
   User? user;
+  Provider? provider;
+  String? providerToken;
+  Admin? adminData;
 
   Future<String> login(String userEmail, String password, String role) async {
     String url = "$baseUrl/$role/login";
@@ -25,8 +32,30 @@ class AuthController extends GetxController {
       if (response.statusCode == 200) {
         print(response.body);
         var responseBody = jsonDecode(response.body);
-        var usermain = UserModel.fromJson(responseBody);
-        user = usermain.user;
+        if (role == "user") {
+          var usermain = UserModel.fromJson(responseBody);
+          user = usermain.user;
+          userToken = usermain.token;
+          print(userToken);
+          print(userToken);
+        }
+        else if (role == "provider") {
+          var providermain = ProviderMain.fromJson(responseBody);
+          provider = providermain.provider;
+          if(provider!.isVerified == true){
+            providerToken = providermain.token;
+            return "1";
+          }
+          else{
+            return "2";
+          }
+        }
+        else if(role == "admin"){
+          var adminmain = AdminModel.fromJson(responseBody);
+          adminData = adminmain.admin;
+          return "3";
+        }
+
         return "200";
       }
     } catch (e) {
@@ -61,16 +90,15 @@ class AuthController extends GetxController {
             "password": password,
             "number": phone,
           };
-    try{
+    try {
       var response = await http.post(
         Uri.parse(url),
         body: json.encode(data),
         headers: {'Content-Type': 'application/json'},
       );
       print(response.body);
-    } catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
 }

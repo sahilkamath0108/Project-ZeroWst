@@ -16,11 +16,11 @@ class _MainPageState extends State<MainPage> {
   AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
-    if(authController.user == null) {
-      return LoginPage();
+    if(authController.user != null || authController.provider != null) {
+      return HomePage();
     }
     else{
-      return HomePage();
+      return LoginPage();
     }
   }
 }

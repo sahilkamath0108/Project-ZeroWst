@@ -1,69 +1,74 @@
-class UserModel {
-  UserModel({
-    required this.success,
-    required this.user,
+class ProviderMain {
+  ProviderMain({
+    required this.provider,
     required this.token,
   });
-  late final bool success;
-  late final User user;
+  late final Provider provider;
   late final String token;
 
-  UserModel.fromJson(Map<String, dynamic> json){
-    success = json['success'];
-    user = User.fromJson(json['user']);
+  ProviderMain.fromJson(Map<String, dynamic> json){
+    provider = Provider.fromJson(json['provider']);
     token = json['token'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['success'] = success;
-    _data['user'] = user.toJson();
+    _data['provider'] = provider.toJson();
     _data['token'] = token;
     return _data;
   }
 }
 
-class User {
-  User({
+class Provider {
+  Provider({
+    required this.reviews,
     required this.id,
     required this.role,
     required this.fname,
     required this.lname,
-    required this.email,
-    required this.longitude,
+    required this.organization,
+    required this.aadharCardNo,
     required this.latitude,
+    required this.longitude,
+    required this.email,
     required this.number,
-    required this.foodBought,
-    required this.reviews,
+    required this.isVerified,
+    required this.food,
     required this.createdAt,
     required this.updatedAt,
     required this.V,
   });
+  late final List<dynamic> reviews;
   late final String id;
   late final String role;
   late final String fname;
   late final String lname;
-  late final String email;
-  late final double longitude;
+  late final String organization;
+  late final int aadharCardNo;
   late final double latitude;
+  late final double longitude;
+  late final String email;
   late final int number;
-  late final List<dynamic> foodBought;
-  late final List<dynamic> reviews;
+  late final bool isVerified;
+  late final List<dynamic> food;
   late final String createdAt;
   late final String updatedAt;
   late final int V;
 
-  User.fromJson(Map<String, dynamic> json){
+  Provider.fromJson(Map<String, dynamic> json){
+    reviews = List.castFrom<dynamic, dynamic>(json['reviews']);
     id = json['_id'];
     role = json['role'];
     fname = json['fname'];
     lname = json['lname'];
-    email = json['email'];
-    longitude = json['longitude'];
+    organization = json['organization'];
+    aadharCardNo = json['aadharCardNo'];
     latitude = json['latitude'];
+    longitude = json['longitude'];
+    email = json['email'];
     number = json['number'];
-    foodBought = List.castFrom<dynamic, dynamic>(json['foodBought']);
-    reviews = List.castFrom<dynamic, dynamic>(json['reviews']);
+    isVerified = json['isVerified'];
+    food = List.castFrom<dynamic, dynamic>(json['food']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     V = json['__v'];
@@ -71,16 +76,19 @@ class User {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
+    _data['reviews'] = reviews;
     _data['_id'] = id;
     _data['role'] = role;
     _data['fname'] = fname;
     _data['lname'] = lname;
-    _data['email'] = email;
-    _data['longitude'] = longitude;
+    _data['organization'] = organization;
+    _data['aadharCardNo'] = aadharCardNo;
     _data['latitude'] = latitude;
+    _data['longitude'] = longitude;
+    _data['email'] = email;
     _data['number'] = number;
-    _data['foodBought'] = foodBought;
-    _data['reviews'] = reviews;
+    _data['isVerified'] = isVerified;
+    _data['food'] = food;
     _data['createdAt'] = createdAt;
     _data['updatedAt'] = updatedAt;
     _data['__v'] = V;

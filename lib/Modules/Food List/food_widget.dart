@@ -3,8 +3,10 @@ import 'package:zerowst_sendnodes/Modules/Food%20List/food_model.dart';
 import 'package:zerowst_sendnodes/constants.dart';
 
 class FoodWidget extends StatelessWidget {
-  final Food food;
-  FoodWidget({Key? key, required this.food}) : super(key: key);
+  final Data food;
+  final String imgUrl;
+  FoodWidget({Key? key, required this.food, required this.imgUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +31,18 @@ class FoodWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0),
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: Image.asset(food.imgUrl,width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,)
-              ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(0),
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: Image.asset(
+                    imgUrl,
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  )),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 4),
                 child: Row(
@@ -61,7 +65,7 @@ class FoodWidget extends StatelessWidget {
                   children: [
                     Text("Expiry: ${food.expiryDate}",
                         style:
-                        TextStyle(color: Color(0xFF39D2C0), fontSize: 14)),
+                            TextStyle(color: Color(0xFF39D2C0), fontSize: 10)),
                   ],
                 ),
               ),
@@ -72,9 +76,9 @@ class FoodWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "PINCODE: ${food.pinCode}",
+                        "Stock: ${food.stock}",
                         style:
-                        TextStyle(color: Color(0xFF57636C), fontSize: 14),
+                            TextStyle(color: Color(0xFF57636C), fontSize: 14),
                       ),
                     ),
                   ],

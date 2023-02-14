@@ -2,9 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zerowst_sendnodes/Modules/Admin%20Home/admin.dart';
 import 'package:zerowst_sendnodes/Modules/Auth/auth_controller.dart';
 import 'package:zerowst_sendnodes/Modules/Auth/signup_page.dart';
 import 'package:zerowst_sendnodes/Modules/Home/home_page.dart';
+import 'package:zerowst_sendnodes/Modules/Providers%20Home%20Page/provider_home_page.dart';
+import 'package:zerowst_sendnodes/Modules/Providers%20Home%20Page/unverified_provider_page.dart';
 import 'package:zerowst_sendnodes/constants.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   final _formKeyLogin = GlobalKey<FormState>();
 
   AuthController authController = Get.put(AuthController());
+  List<String> usersList = ["user", "provider", "admin"];
+  String selectedUser = "user";
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +130,24 @@ class _LoginPageState extends State<LoginPage> {
                           margin:
                               EdgeInsets.only(bottom: 20, left: 20, right: 20),
                         ),
+                        Center(child: Text("You are a :")),
+                        Center(
+                          child: DropdownButton(
+                            value: selectedUser,
+                            items: usersList.map((String div) {
+                              return DropdownMenuItem(
+                                value: div,
+                                child: Text(div),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedUser = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, bottom: 20, right: 20),
@@ -134,22 +157,41 @@ class _LoginPageState extends State<LoginPage> {
                                   var response = await authController.login(
                                       _emailController.text.trim(),
                                       _passController.text.trim(),
-                                      "User");
+                                      selectedUser);
                                   if (response == "200") {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => HomePage()));
-                                  } else {
+                                  }
+                                  else if(response == "1"){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ProvidersHome()));
+                                  }
+                                  else if(response == "2"){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => UnverifiedProviderPage()));
+                                  }
+                                  else if(response == "3"){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AdminHomePage()));
+                                  }
+                                  else if (response == "400"){
                                     showDialog(
                                         context: context,
                                         builder: (context) => Dialog(
-                                          child: Container(
-                                            color: Colors.white,
-                                            padding: EdgeInsets.all(20),
-                                            child: Text("An error ocurred"),
-                                          ),
-                                        ));
+                                              child: Container(
+                                                color: Colors.white,
+                                                padding: EdgeInsets.all(20),
+                                                child: Text("An error ocurred"),
+                                              ),
+                                            ));
                                   }
                                 }
                               },

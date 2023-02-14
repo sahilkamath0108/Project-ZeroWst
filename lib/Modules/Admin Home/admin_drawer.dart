@@ -3,17 +3,16 @@ import 'package:get/get.dart';
 import 'package:zerowst_sendnodes/Modules/Auth/auth_controller.dart';
 import 'package:zerowst_sendnodes/constants.dart';
 import 'package:zerowst_sendnodes/main_page.dart';
-import 'user_model.dart';
 
-class DrawerPage extends StatefulWidget {
-  final User user;
-  const DrawerPage({Key? key, required this.user}) : super(key: key);
+class AdminDrawer extends StatefulWidget {
+  const AdminDrawer({Key? key}) : super(key: key);
 
   @override
-  State<DrawerPage> createState() => _DrawerPageState();
+  State<AdminDrawer> createState() => _AdminDrawerState();
 }
 
-class _DrawerPageState extends State<DrawerPage> {
+class _AdminDrawerState extends State<AdminDrawer> {
+
   AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
@@ -27,8 +26,8 @@ class _DrawerPageState extends State<DrawerPage> {
               backgroundColor: DARK_GREEN,
               child: Icon(Icons.person),
             ),
-            title: Text(widget.user.fname +" "+ widget.user.lname, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-            subtitle: Text(widget.user.email),
+            title: Text(authController.provider!.fname +" "+ authController.provider!.lname, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            subtitle: Text(authController.provider!.email),
             onTap: () {},
           ),
           Divider(),
@@ -107,17 +106,16 @@ class _DrawerPageState extends State<DrawerPage> {
             leading: Icon(Icons.logout),
             title: Text('Log Out', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
             onTap: () {
-              authController.user = null;
+              authController.provider = null;
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(builder: (context)=>MainPage()));
             },
           ),
         ],
       ),
-    );
+    );;
   }
 }
-
 
 class LogoHeader extends StatelessWidget {
   const LogoHeader({super.key});
@@ -143,3 +141,4 @@ class LogoHeader extends StatelessWidget {
     );
   }
 }
+
